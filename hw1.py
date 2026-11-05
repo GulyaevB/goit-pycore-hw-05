@@ -1,12 +1,18 @@
-def fibonacci(n):
-    if n <= 0:
-        return 0
+def caching_fibonacci():
 
-    if n == 1:
-        return 1
+    def fibonacci(n):
+        if n <= 0:
+            return 0
 
-    return fibonacci(n - 1) + fibonacci(n - 2)
+        if n == 1:
+            return 1
+
+        return fibonacci(n - 1) + fibonacci(n - 2)
+
+    return fibonacci
 
 
-print(fibonacci(10))
-print(fibonacci(15))
+fib = caching_fibonacci()
+
+print(fib(10))
+print(fib(15))
