@@ -1,11 +1,18 @@
 def input_error(func):
-    """Handle ValueError in command handlers."""
+    """Handle input errors in command handlers."""
 
     def inner(*args, **kwargs):
         try:
             return func(*args, **kwargs)
+
         except ValueError:
             return "Give me name and phone please."
+
+        except IndexError:
+            return "Enter user name"
+
+        except KeyError:
+            return "Contact not found."
 
     return inner
 
@@ -48,23 +55,28 @@ def change_contact(args, contacts):
     name = name.lower()
 
     if name not in contacts:
-        return "Contact not found."
+        raise KeyError(name)
 
     contacts[name] = phone
 
     return "Contact updated."
 
 
+@input_error
 def show_phone(args, contacts):
     """Return the phone number for a given contact."""
+    if not args:
+        raise IndexError("Missing user name")
+
     if len(args) != 1:
         return "Invalid command."
 
     name = args[0].lower()
 
-    return contacts.get(name, "Contact not found.")
+    return contacts[name]
 
 
+@input_error
 def show_all(contacts):
     """Return all saved contacts as a formatted string."""
     if not contacts:
