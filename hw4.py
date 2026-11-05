@@ -1,3 +1,14 @@
+def input_error(func):
+    """Handle ValueError in command handlers."""
+
+    def inner(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except ValueError:
+            return "Give me name and phone please."
+
+    return inner
+
 
 def parse_input(user_input):
     """
@@ -15,10 +26,11 @@ def parse_input(user_input):
     return command, args
 
 
+@input_error
 def add_contact(args, contacts):
     """Add a new contact or update an existing one."""
     if len(args) != 2:
-        return "Invalid command."
+        raise ValueError("Expected name and phone")
 
     name, phone = args
     contacts[name.lower()] = phone
@@ -26,10 +38,11 @@ def add_contact(args, contacts):
     return "Contact added."
 
 
+@input_error
 def change_contact(args, contacts):
     """Change the phone number of an existing contact."""
     if len(args) != 2:
-        return "Invalid command."
+        raise ValueError("Expected name and phone")
 
     name, phone = args
     name = name.lower()
