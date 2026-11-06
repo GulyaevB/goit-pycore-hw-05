@@ -1,6 +1,11 @@
-def input_error(func):
-    """Handle input errors in command handlers."""
 
+from functools import wraps
+
+
+def input_error(func):
+    """Handle input errors raised by command handlers."""
+
+    @wraps(func)
     def inner(*args, **kwargs):
         try:
             return func(*args, **kwargs)
